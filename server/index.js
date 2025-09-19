@@ -3,7 +3,13 @@ const app = express()
 const http = require('http')
 const cors = require('cors')
 const {Server} = require('socket.io')
-app.use(cors())
+
+// Allow CORS from configurable origins (comma-separated)
+const clientOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+    .split(',')
+    .map(o => o.trim())
+
+app.use(cors({ origin: clientOrigins }))
 
 app.get('/' , function(req,res){
     res.send("helo")
@@ -12,7 +18,7 @@ app.get('/' , function(req,res){
 const server = http.createServer(app)
 const io = new Server(server , {
     cors:{
-        origin : "http://localhost:5173"
+        origin : clientOrigins
     }
 })
 
@@ -34,6 +40,7 @@ io.on('connection' , (socket)=>{
 })
 
 
-server.listen(3000 , ()=>{
-    console.log("server is running at port 3000")
+const PORT = process.env.PORT || 3000
+server.listen(PORT , ()=>{
+    console.log(`server is running at port ${PORT}`)
 })

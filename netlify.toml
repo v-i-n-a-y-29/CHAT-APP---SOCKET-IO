@@ -1,0 +1,15 @@
+[build]
+# Run builds from the client folder
+base = "client"
+publish = "dist"
+command = "npm run build"
+
+[context.production.environment]
+# Vite 7 requires Node 18+; Netlify default is fine but pin for safety
+NODE_VERSION = "20"
+
+# SPA fallback so client-side routing works on refresh
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

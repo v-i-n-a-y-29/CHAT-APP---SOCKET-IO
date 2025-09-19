@@ -2,7 +2,13 @@ import { useState } from 'react'
 import io from 'socket.io-client'
 import Chat from './Chat'
 
-const socket = io.connect('http://localhost:3000')
+// Socket server URL:
+// - In development it defaults to http://localhost:3000
+// - In production (Netlify), set an environment variable `VITE_SOCKET_URL`
+//   in the Netlify site settings to your deployed Socket.IO server URL
+//   (e.g., https://your-socket-server.example.com)
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000'
+const socket = io(SOCKET_URL)
 
 function App() {
   const [name, setname] = useState("")
