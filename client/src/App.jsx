@@ -8,6 +8,9 @@ import Chat from './Chat'
 //   in the Netlify site settings to your deployed Socket.IO server URL
 //   (e.g., https://your-socket-server.example.com)
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:3000'
+// Helpful debug log: shows which URL the client will try to connect to after build.
+// Netlify must have VITE_SOCKET_URL set at build time for the production bundle.
+console.log('SOCKET_URL (client):', SOCKET_URL)
 const socket = io(SOCKET_URL)
 
 function App() {
