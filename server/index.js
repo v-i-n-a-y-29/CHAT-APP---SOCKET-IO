@@ -26,10 +26,10 @@ app.get('/health', function(req, res) {
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: clientOrigins,
+        origin: "*",  // Temporarily allow all origins to test
         methods: ["GET", "POST"],
-        allowedHeaders: ["content-type"],
-        credentials: true
+        credentials: true,
+        transports: ['websocket', 'polling']
     }
 })
 
@@ -43,8 +43,8 @@ io.on('connection' , (socket)=>{
 
     socket.on("sendMessage" , (data)=>{
         console.log(`received message from ${data.author} in room ${data.room}: ${data.message}`)
-        // Emit to everyone in the room (including sender) so all clients update
-        io.in(data.room).emit("receive_message", data)
+        // Emit only to others in the room (not back to sender)
+        socket.to(data.room).emit("receive_message", data)
     })
 
     socket.on('disconnect' , ()=>{

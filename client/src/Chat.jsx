@@ -17,6 +17,7 @@ function Chat({ socket, name, room }) {
     const text = currmessage.trim()
     if (text !== '') {
       const messageData = {
+        id: Date.now() + Math.random(), // Unique ID for each message
         room: room,
         author: name,
         message: text,
@@ -31,7 +32,10 @@ function Chat({ socket, name, room }) {
 
   useEffect(() => {
     const handleReceive = (data) => {
-      setMessagesData((list) => [...list, data])
+      // Only add received messages that aren't from the current user
+      if (data.author !== name) {
+        setMessagesData((list) => [...list, data])
+      }
     }
 
     socket.on('receive_message', handleReceive)
@@ -39,7 +43,7 @@ function Chat({ socket, name, room }) {
     return () => {
       socket.off('receive_message', handleReceive)
     }
-  }, [socket])
+  }, [socket, name])
 
   return (
     <div className="flex justify-center">
@@ -52,11 +56,11 @@ function Chat({ socket, name, room }) {
         {/* Chat Body */}
         <div className="flex-grow p-2.5 border-t border-b border-gray-200 overflow-y-auto bg-gray-50 flex flex-col">
           <div className="flex flex-col w-full">
-            {messagesData.map((messageContent, index) => {
+            {messagesData.map((messageContent) => {
               const isYou = name === messageContent.author;
               return (
                 <div
-                  key={index}
+                  key={messageContent.id}
                   className={`mb-3 max-w-[70%] p-2 px-3 rounded-2xl text-sm leading-relaxed
                     ${isYou ? 
                       'self-end bg-[#4d90fe] text-white rounded-br-sm' : 
