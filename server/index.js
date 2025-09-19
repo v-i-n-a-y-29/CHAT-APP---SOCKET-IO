@@ -16,10 +16,12 @@ app.get('/' , function(req,res){
 })
 
 const server = http.createServer(app)
-const io = new Server(server , {
-    cors:{
-        origin : clientOrigins,
-        methods:['GET','POST']
+const io = new Server(server, {
+    cors: {
+        origin: clientOrigins,
+        methods: ["GET", "POST"],
+        allowedHeaders: ["content-type"],
+        credentials: true
     }
 })
 
