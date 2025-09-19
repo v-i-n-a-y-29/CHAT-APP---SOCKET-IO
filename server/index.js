@@ -31,7 +31,9 @@ io.on('connection' , (socket)=>{
     })
 
     socket.on("sendMessage" , (data)=>{
-        socket.to(data.room).emit("receive_message" , data)
+        console.log(`received message from ${data.author} in room ${data.room}: ${data.message}`)
+        // Emit to everyone in the room (including sender) so all clients update
+        io.in(data.room).emit("receive_message", data)
     })
 
     socket.on('disconnect' , ()=>{
