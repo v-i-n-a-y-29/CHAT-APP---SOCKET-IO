@@ -12,7 +12,15 @@ const clientOrigins = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
 app.use(cors({ origin: clientOrigins }))
 
 app.get('/' , function(req,res){
-    res.send("helo")
+    res.send({
+        status: 'ok',
+        message: 'Socket.IO chat server is running',
+        timestamp: new Date().toISOString()
+    })
+})
+
+app.get('/health', function(req, res) {
+    res.send({ status: 'healthy', uptime: process.uptime() })
 })
 
 const server = http.createServer(app)
