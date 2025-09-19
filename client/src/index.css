@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,700");
+
+/* Custom component styles can be added here */
+@layer components {
+  /* You can define your custom component styles here */
+}
